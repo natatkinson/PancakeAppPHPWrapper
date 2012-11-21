@@ -14,9 +14,8 @@ class pancakeapp {
 		/* SET YOUR API KEY AND API URL BELOW */
 		/**************************************/
 		
-		$this->api_key = "?X-API-KEY=__key__";		
+		$this->api_key = "__key__";		
 		$this->api_url = "http://www.__pancake_install__/api_1/";
-		
 
 	}
 		
@@ -38,30 +37,20 @@ class pancakeapp {
 	*		'profile' => string client notes
 	*		'passphrase' => string client passphrase to kitchen area	
 	* @access public
-    * @return $result A succesful response will be an object of the form
-    *	{
-    *		'status' => true
-    *		'id => client id
-    *		'message' => message saying client has been created
-    *	}
+	* @return $result A succesful response will be an object of the form
+	*	{
+	*		'status' => true
+	*		'id => client id
+	*		'message' => message saying client has been created
+	*	}
 	*/
 	public function client_add($client_info){
-	
 		
-		$info = $this->client_info($client);
-		$data = array( 'X-API-KEY' => $this->api_key,
-				      'first_name' => $info['client_contact_fname'],
-				      'last_name' => $info['client_contact_lname'],
-				      'email' => $info['client_contact_email'],
-				      'company' => $info['client_name'],
-				      'address' => $info['client_contact_address'],
-				      'phone' => $info['client_contact_phone'],
-				      'website' => $info['client_site_domain_base'].$info['client_site_domain'].$info['client_site_domain_final']
-				      );
+		$client_info['X-API-KEY'] = $this->api_key;
 				
 		$result = rest_helper(
 			    $this->api_url."clients/new/",
-			    $data, 'POST'
+			    $client_info, 'POST'
 			  );
 		
 		return $result;
