@@ -54,7 +54,6 @@ class pancakeapp {
 			  );
 		
 		return $result;
-		//THE RETURNED CLIENT ID IS:$client_id = $result->id;
 			
 	}
 	
