@@ -1,5 +1,5 @@
 <?php
-//INCLUDE rest_helper for POST functions
+//INCLUDE rest_helper for POST/GET functions
 include "rest_helper.php";
 
 /*********************************************************************
