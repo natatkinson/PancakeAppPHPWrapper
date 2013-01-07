@@ -6,17 +6,20 @@ $pancake = new pancakeapp();
 
 /* CLIENT LIST */
 	$result = $pancake->client_list();
+	$rcount = $result->body['count'];
+	echo "count: $rcount <br>";
 	
+	$result = $result->body['clients'];
 	//ITERATE THROUGH CLIENTS
 	foreach($result as $client){
-		echo "<BR> CLIENT_ID: ".$client['id']."<BR>";
+		echo "<BR> CLIENT_ID: ".$client['id']." - Name: ".$client['first_name']."<BR>";
 	}
 	
-	exit;
+
 	
 	
 /* CLIENT INFO */
-	$client_id = 1;
+	$client_id = 3;
 	$result = $pancake->client_info($client_id);
 	
 	var_dump($result);
