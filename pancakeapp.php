@@ -72,7 +72,6 @@ class pancakeapp {
 	*		'id => client id
 	*		'message' => message saying client has been created
 	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
 	*/
 	public function client_info($client_id){
 		
@@ -144,6 +143,7 @@ class pancakeapp {
 	*		'website' => string client website url
 	*		'profile' => string client notes
 	*		'passphrase' => string client passphrase to kitchen area	
+!!	*		'random_passphrase' => BOOL system sets passphrase
 	* @access public
 	* @return $result A succesful response will be an object of the form
 	*	{
@@ -151,7 +151,6 @@ class pancakeapp {
 	*		'id => client id
 	*		'message' => message saying client has been created
 	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
 	*/
 	public function client_edit($client_info){
 		
@@ -276,8 +275,6 @@ class pancakeapp {
 	/*## returns info on invoice in system
 	* @param int $invoice_id	
 	* @access public
-	*
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
 	*/
 	public function invoice_info($invoice_id){
 		
@@ -309,6 +306,9 @@ class pancakeapp {
 	*		'frequency' => string ('w','m','y')
 	*		'auto_send' => int (0 or 1)
 	*		'currency' => string currency code
+!!	*		'send_x_days_before' => int
+!!	*		'payment_date' => string in format: YYYY-MM-DD, tomorrow, next week, etc
+!!	*		'is_viewable' => bool if viewable in client area
 	*		'items' => array( 
 	*			{
 	*				'name' => string
@@ -341,6 +341,49 @@ class pancakeapp {
 			
 	}
 	
+	/*** INVOICE EDIT ******************************************************************
+	/*## updates invoice in the system
+	* @param array $invoice_data contains all information on the invoice for creation
+	*	this array should be in the form (if type='DETAILED', include items)
+	*	array(
+	*		'unique_id' => string required
+	*		'client_id' => int 
+	*		'type' => string required ('SIMPLE', 'DETAILED' or 'ESTIMATE')
+	*		'amount' => string required(if type='SIMPLE')
+	*		'description' => string
+	*		'notes' => string
+	*		'is_paid' => int (0 or 1)
+	*		'due_date' => string in format: YYYY-MM-DD, tomorrow, next week, etc
+	*		'invoice_number' => string
+	*		'is_recurring' => int (0 or 1)
+	*		'frequency' => string ('w','m','y')
+	*		'auto_send' => int (0 or 1)
+	*		'send_x_days_before' => int
+	*		'payment_date' => string in format: YYYY-MM-DD, tomorrow, next week, etc
+	*		'is_viewable' => bool if viewable in client area,
+	*		'project_id' => int
+	*	)	
+	* @access public
+	* @return $result A succesful response will be an object of the form
+	*	{
+	*		'status' => bool 
+	*		'unique_id => string unique invoice id
+	*		'message' => strng message saying invoice has been created (or error message)
+	*	}
+	*/
+	public function invoice_edit($invoice_data){
+		
+		$invoice_data['X-API-KEY'] = $this->api_key;
+				
+		$result = rest_helper(
+			    $this->api_url."invoices/edit/",
+			    $invoice_data, 'POST'
+			  );
+		
+		return $result;
+			
+	}
+	
 	/*** INVOICE DELETE ******************************************************************
 	/*## deletes invoice from system
 	* @param int required $invoice_id	
@@ -365,105 +408,6 @@ class pancakeapp {
 			
 	}
 	
-	/*** INVOICE UPDATE - MARK AS OPEN ******************************************************************
-	/*## opens invoice from system
-	* @param int required $invoice_id	
-	* @access public
-	* @return $result A succesful response will be an object of the form
-	*	{
-	*		'status' => bool true
-	*		'message' => string message saying invoice has been created
-	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
-	*/
-	public function invoice_update_open($invoice_id){
-		
-		$data['X-API-KEY'] = $this->api_key;
-		$data['id'] = $invoice_id;
-				
-		$result = rest_helper(
-			    $this->api_url."invoices/open",
-			    $data, 'POST'
-			  );
-		
-		return $result;
-			
-	}
-	
-	/*** INVOICE UPDATE - MARK AS CLOSED ******************************************************************
-	/*## closes invoice
-	* @param int required $invoice_id	
-	* @access public
-	* @return $result A succesful response will be an object of the form
-	*	{
-	*		'status' => bool true
-	*		'message' => string message saying invoice has been created
-	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
-	*/
-	public function invoice_update_close($invoice_id){
-		
-		$data['X-API-KEY'] = $this->api_key;
-		$data['id'] = $invoice_id;
-				
-		$result = rest_helper(
-			    $this->api_url."invoices/close",
-			    $data, 'POST'
-			  );
-		
-		return $result;
-			
-	}
-	
-	/*** INVOICE UPDATE - MARK AS PAID ******************************************************************
-	/*## marks invoice as paid
-	* @param int required $invoice_id	
-	* @access public
-	* @return $result A succesful response will be an object of the form
-	*	{
-	*		'status' => bool true
-	*		'message' => string message saying invoice has been created
-	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
-	*/
-	public function invoice_update_paid($invoice_id){
-		
-		$data['X-API-KEY'] = $this->api_key;
-		$data['id'] = $invoice_id;
-				
-		$result = rest_helper(
-			    $this->api_url."invoices/paid",
-			    $data, 'POST'
-			  );
-		
-		return $result;
-			
-	}
-	
-	/*** INVOICE SEND ******************************************************************
-	/*## sends/resend invoice
-	* @param int required $invoice_id	
-	* @access public
-	* @return $result A succesful response will be an object of the form
-	*	{
-	*		'status' => bool true
-	*		'message' => string message saying invoice has been created
-	*	}
-	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
-	*/
-	public function invoice_send($invoice_id){
-		
-		$data['X-API-KEY'] = $this->api_key;
-		$data['id'] = $invoice_id;
-				
-		$result = rest_helper(
-			    $this->api_url."invoices/send",
-			    $data, 'POST'
-			  );
-		
-		return $result;
-			
-	}
 	
 }//END pancakeapp
 ?>
