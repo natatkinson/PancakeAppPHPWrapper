@@ -1,4 +1,7 @@
 <?php
+//INCLUDE rest_helper for POST/GET functions
+include "rest_helper.php";
+
 /*********************************************************************
 /*## PANCAKEAPE API*/
 //http://support.pancakeapp.com/api_endpoints/
@@ -48,13 +51,14 @@ class pancakeapp {
 	*/
 	public function client_list(){
 		
+		$data['X-API-KEY'] = $this->api_key;
 				
-		$result = $this->rest_helper(
-			    "clients/",
+		$result = rest_helper(
+			    $this->api_url."clients/",
 			    $data, 'GET'
 			  );
 		
-		return $result;
+		return $result['clients'];
 			
 	}
 	
@@ -72,10 +76,11 @@ class pancakeapp {
 	*/
 	public function client_info($client_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $client_id;
 				
-		$result = $this->rest_helper(
-			    "clients/show/",
+		$result = rest_helper(
+			    $this->api_url."clients/show/",
 			    $data, 'GET'
 			  );
 		
@@ -109,9 +114,11 @@ class pancakeapp {
 	*	}
 	*/
 	public function client_add($client_info){
-						
-		$result = $this->rest_helper(
-			    "clients/new/",
+		
+		$client_info['X-API-KEY'] = $this->api_key;
+				
+		$result = rest_helper(
+			    $this->api_url."clients/new/",
 			    $client_info, 'POST'
 			  );
 		
@@ -144,13 +151,15 @@ class pancakeapp {
 	*		'id => client id
 	*		'message' => message saying client has been created
 	*	}
+	* METHOD DOES NOT WORK - ERROR IN PANCAKE API
 	*/
 	public function client_edit($client_info){
 		
+		$client_info['X-API-KEY'] = $this->api_key;
 		print_r($client_info);
 				
-		$result = $this->rest_helper(
-			    "clients/edit",
+		$result = rest_helper(
+			    $this->api_url."clients/edit",
 			    $client_info, 'POST'
 			  );
 		
@@ -170,10 +179,11 @@ class pancakeapp {
 	*/
 	public function client_delete($client_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $client_id;
 				
-		$result = $this->rest_helper(
-			    "clients/delete",
+		$result = rest_helper(
+			    $this->api_url."clients/delete",
 			    $data, 'POST'
 			  );
 		
@@ -241,7 +251,8 @@ class pancakeapp {
 	*/
 	public function invoice_list(){
 		
-
+		$data['X-API-KEY'] = $this->api_key;
+		
 		$arg_list = func_get_args();
 		
 		if($arg_list[0]){$data['client_id'] = $arg_list[0];}
@@ -252,8 +263,8 @@ class pancakeapp {
 				
 				
 				
-		$result = $this->rest_helper(
-			    "invoices/",
+		$result = rest_helper(
+			    $this->api_url."invoices/",
 			    $data, 'GET'
 			  );
 		
@@ -270,10 +281,11 @@ class pancakeapp {
 	*/
 	public function invoice_info($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/show/",
+		$result = rest_helper(
+			    $this->api_url."invoices/show/",
 			    $data, 'GET'
 			  );
 		
@@ -318,9 +330,10 @@ class pancakeapp {
 	*/
 	public function invoice_add($invoice_data){
 		
+		$invoice_data['X-API-KEY'] = $this->api_key;
 				
-		$result = $this->rest_helper(
-			    "invoices/new/",
+		$result = rest_helper(
+			    $this->api_url."invoices/new/",
 			    $invoice_data, 'POST'
 			  );
 		
@@ -340,10 +353,11 @@ class pancakeapp {
 	*/
 	public function invoice_delete($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/delete",
+		$result = rest_helper(
+			    $this->api_url."invoices/delete",
 			    $data, 'POST'
 			  );
 		
@@ -364,10 +378,11 @@ class pancakeapp {
 	*/
 	public function invoice_update_open($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/open",
+		$result = rest_helper(
+			    $this->api_url."invoices/open",
 			    $data, 'POST'
 			  );
 		
@@ -388,10 +403,11 @@ class pancakeapp {
 	*/
 	public function invoice_update_close($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/close",
+		$result = rest_helper(
+			    $this->api_url."invoices/close",
 			    $data, 'POST'
 			  );
 		
@@ -412,10 +428,11 @@ class pancakeapp {
 	*/
 	public function invoice_update_paid($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/paid",
+		$result = rest_helper(
+			    $this->api_url."invoices/paid",
 			    $data, 'POST'
 			  );
 		
@@ -436,84 +453,17 @@ class pancakeapp {
 	*/
 	public function invoice_send($invoice_id){
 		
+		$data['X-API-KEY'] = $this->api_key;
 		$data['id'] = $invoice_id;
 				
-		$result = $this->rest_helper(
-			    "invoices/send",
+		$result = rest_helper(
+			    $this->api_url."invoices/send",
 			    $data, 'POST'
 			  );
 		
 		return $result;
 			
 	}
-
-	/*** REST HELPER ******************************************************************
-	/*## makes connection
-	* @param int required $invoice_id	
-	* @access public
-	* @return api response
-	*/
-	
-	public function rest_helper($uri,$params,$method){ // Setup Request
-        
-        // Build base Request URL
-        $request_url = $this->api_url . $uri;
-
-        // Append query string for parameters
-        if ($method == 'GET' && !empty($params)){
-            $request_url .= '?' . http_build_query($params);
-        }
-
-        echo "<BR>URL: $request_url <BR>";
-        
-        $curl = curl_init();
-
-        // POST request will be passed as multipart/form-data
-        if ($method === 'POST'){
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        }
-
-        // Add API header
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-API-KEY: ' . $this->api_key));
-
-        // Setup Options for Request. Only 5 seconds allowed for the request
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_URL, $request_url);
-
-        // Make Request
-        $curl_response = curl_exec($curl);
-
-        $response->url = $request_url;
-        $response->status_code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $response->request_time = (float) curl_getinfo($curl, CURLINFO_TOTAL_TIME);
-
-        // Request Failed...
-        if ($curl_response === FALSE)
-        {
-            $this->log_message('error', "Pancake::request() - Curl Error #".curl_errno($curl)." - ".curl_error($curl));
-            return $response;
-        }
-
-        // Request was made, determine if it was successful or not.
-        $response->success = ($response->status_code >= 200 && $response->status_code < 300);
-        $response->body = json_decode($curl_response,true);
-       // $response->parse();
-
-        // Double Check API Status Response. If it is not set, it will be NULL
-        if ($response->status === FALSE)
-        {
-            $error = ($response->error) ? $response->error : 'Unknown Pancake API Error';
-            echo $error;
-            $response->success = FALSE;
-            return $response;
-        }
-
-        // Close the connection and return the result
-        curl_close($curl);
-        return $response;
-    }//END REST HELPER
 	
 }//END pancakeapp
 ?>
